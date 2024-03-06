@@ -1,13 +1,10 @@
-import express, { Request } from "express";
-import fs from "fs";
-import { createHandler, RequestContext } from "graphql-http/lib/use/express";
-import path from "path";
+import express from "express";
+import { createHandler } from "graphql-http/lib/use/express";
 import { v4 as uuid } from "uuid";
-
-import { makeExecutableSchema } from "@graphql-tools/schema";
 
 import { findUserForToken, getTokenFromReq } from "./auth";
 import { createGraphContext, GraphContext } from "./graphContext";
+import { makeSchema } from "./schema";
 
 const PORT = 7000;
 const HOST = "localhost";
@@ -54,7 +51,12 @@ const resolverRoot = {
     hello: (root: any, args: any, context: GraphContext, info: any) => {
       return {};
     },
-    rollDice: (root: any, args: RollDiceInput, context: GraphContext, info: any) => {
+    rollDice: (
+      root: any,
+      args: RollDiceInput,
+      context: GraphContext,
+      info: any
+    ) => {
       return {
         id: uuid(),
         numDice: args.numDice,
@@ -67,24 +69,10 @@ const resolverRoot = {
   HelloPayload: helloPayloadResolver,
 };
 
-const getSchemaPath = () => {
-  return path.join(process.cwd(), "schema.graphql");
-};
-
-const getRawSchema = () => {
-  const schemaPath = getSchemaPath();
-  const rawSchema = fs.readFileSync(schemaPath).toString();
-
-  return rawSchema;
-};
-
 const run = async () => {
-  const schema = makeExecutableSchema({
-    typeDefs: getRawSchema(),
-    resolvers: resolverRoot,
-  });
-
   const app = express();
+
+  const schema = makeSchema(resolverRoot);
 
   app.all(
     "/api",
