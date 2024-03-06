@@ -24,7 +24,7 @@ const run = async () => {
         const token = getTokenFromReq(req);
         const user = findUserForToken(token);
 
-        return createGraphContext(user);
+        return { ...createGraphContext(user) };
       },
     })
   );
