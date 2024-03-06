@@ -1,7 +1,7 @@
-import express from "express";
+import express, { Request } from "express";
 import fs from "fs";
 import { makeExecutableSchema } from "@graphql-tools/schema";
-import { createHandler } from "graphql-http/lib/use/express";
+import { RequestContext, createHandler } from "graphql-http/lib/use/express";
 import path from "path";
 import { v4 as uuid } from "uuid";
 
@@ -28,7 +28,7 @@ const helloResultResolver = {
   },
   payload: (obj: any) => {
     return {};
-  }
+  },
 };
 
 const rollDiceResultResolver = {
@@ -47,6 +47,7 @@ const rollDiceResultResolver = {
 const resolverRoot = {
   Query: {
     hello: (root: any, args: any, context: any, info: any) => {
+      console.log(context);
       return {};
     },
     rollDice: (root: any, args: RollDiceInput, context: any, info: any) => {
@@ -73,6 +74,13 @@ const getRawSchema = () => {
   return rawSchema;
 };
 
+const getToken = (req: any) => {
+  const bearer = req.headers["authorization"];
+  const token = bearer ? bearer.replace("Bearer ", "") : undefined;
+
+  return token;
+}
+
 const run = async () => {
   const schema = makeExecutableSchema({
     typeDefs: getRawSchema(),
@@ -86,6 +94,10 @@ const run = async () => {
     createHandler({
       schema,
       rootValue: resolverRoot,
+      context: (req, params) => {
+        const token = getToken(req);
+        return { token };
+      },
     })
   );
 
