@@ -1,0 +1,21 @@
+type HelloPayload {
+  id: String
+  message: String
+}
+
+type HelloResult {
+  id: String
+  payload: HelloPayload
+}
+
+type RollDiceResult {
+  id: String
+  numDice: Int
+  numSides: Int
+  rolls: [Int]
+}
+
+type Query {
+  hello: HelloResult
+  rollDice(numDice: Int!, numSides: Int): RollDiceResult
+}
