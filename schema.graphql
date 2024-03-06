@@ -15,7 +15,13 @@ type RollDiceResult {
   rolls: [Int]
 }
 
+type Viewer {
+  id: String
+  username: String
+}
+
 type Query {
   hello: HelloResult
   rollDice(numDice: Int!, numSides: Int): RollDiceResult
+  viewer: Viewer
 }

@@ -25,7 +25,6 @@ const helloPayloadResolver = {
 
 const helloResultResolver = {
   id: (obj: any, args: any, context: GraphContext, info: any) => {
-    console.log(context.user);
     return uuid();
   },
   payload: (obj: any) => {
@@ -46,6 +45,15 @@ const rollDiceResultResolver = {
   },
 };
 
+const viewerResolver = {
+  id: (obj: any, args: any, context: GraphContext, info: any) => {
+    return context.user?.id;
+  },
+  username: (obj: any, args: any, context: GraphContext, info: any) => {
+    return context.user?.username;
+  },
+};
+
 const resolverRoot = {
   Query: {
     hello: (root: any, args: any, context: GraphContext, info: any) => {
@@ -63,10 +71,18 @@ const resolverRoot = {
         numSides: args.numSides || 6,
       };
     },
+    viewer: (obj: any, args: any, context: GraphContext, info: any) => {
+      if (!context.user) {
+        return null;
+      }
+
+      return {};
+    },
   },
   RollDiceResult: rollDiceResultResolver,
   HelloResult: helloResultResolver,
   HelloPayload: helloPayloadResolver,
+  Viewer: viewerResolver,
 };
 
 const run = async () => {
