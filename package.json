@@ -5,7 +5,7 @@
   "main": "dist/main.js",
   "scripts": {
     "generate": "graphql-codegen --config codegen.yml",
-    "build": "tsc --project tsconfig.json",
+    "build": "npm run generate && tsc --project tsconfig.json",
     "start": "npm run build && node dist/main.js"
   },
   "keywords": [],
