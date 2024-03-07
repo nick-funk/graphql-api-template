@@ -1,3 +1,4 @@
+import { Mutation } from './mutators/Mutation';
 import { HelloPayload } from './resolvers/HelloPayload';
 import { HelloResult } from './resolvers/HelloResult';
 import { Query } from './resolvers/Query';
@@ -7,6 +8,7 @@ import { Viewer } from './resolvers/Viewer';
 export const buildRoot = () => {
   return {
     Query,
+    Mutation,
     RollDiceResult,
     HelloResult,
     HelloPayload,

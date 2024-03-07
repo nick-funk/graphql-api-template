@@ -29,12 +29,6 @@ const run = async () => {
     })
   );
 
-  app.use(json());
-
-  app.get("/restDirective", (req, res) => {
-    res.send({ rest: { message: "from rest directive" } });
-  });
-
   app.listen(PORT, HOST, () => {
     console.log(`app listening on ${HOST}:${PORT}...`);
   });

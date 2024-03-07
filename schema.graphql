@@ -36,6 +36,9 @@ type Query {
   hello: HelloResult
   rollDice(numDice: Int!, numSides: Int): RollDiceResult
   viewer: Viewer
-  rest: RestResult @rest(url: "http://localhost:7000/restDirective")
   adminsOnly: String @auth(requires: ADMIN)
+}
+
+type Mutation {
+  counter(amount: Int = 1): Int
 }
