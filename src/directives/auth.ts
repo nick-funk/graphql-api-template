@@ -65,6 +65,14 @@ export const getUser = (user: User | null) => {
         return false;
       }
 
+      // all users match the "user" role
+      if (user && role === "USER") {
+        return true;
+      }
+
+      // for now, only user0 is an admin, could put
+      // more complex role look ups later if you 
+      // wanted.
       if (role === "ADMIN" && user.username === "user0") {
         return true;
       }
