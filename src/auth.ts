@@ -7,13 +7,18 @@ export const getTokenFromReq = (req: any) => {
   const token = bearer ? bearer.replace("Bearer ", "") : undefined;
 
   return token;
-}
+};
 
 export const findUserForToken = (token: string): User | null => {
   if (token === "user0") {
     return {
       id: uuid(),
       username: "user0",
+    };
+  } else if (token === "user1") {
+    return {
+      id: uuid(),
+      username: "user1",
     };
   }
 

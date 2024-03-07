@@ -1,10 +1,10 @@
-import express from "express";
+import express, { json } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 
 import { findUserForToken, getTokenFromReq } from "./auth";
 import { createGraphContext } from "./graphContext";
-import { makeSchema } from "./schema";
 import { buildRoot } from "./graphql";
+import { makeSchema } from "./schema";
 
 const PORT = 7000;
 const HOST = "localhost";
@@ -28,6 +28,12 @@ const run = async () => {
       },
     })
   );
+
+  app.use(json());
+
+  app.get("/restDirective", (req, res) => {
+    res.send({ rest: { message: "from rest directive" } });
+  });
 
   app.listen(PORT, HOST, () => {
     console.log(`app listening on ${HOST}:${PORT}...`);

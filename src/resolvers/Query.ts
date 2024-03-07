@@ -26,4 +26,7 @@ export const Query: QueryResolvers = {
 
     return {};
   },
+  adminsOnly: () => {
+    return "hello admin";
+  }
 };

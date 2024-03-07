@@ -31,7 +31,9 @@ export type HelloResult = {
 
 export type Query = {
   __typename?: 'Query';
+  adminsOnly?: Maybe<Scalars['String']['output']>;
   hello?: Maybe<HelloResult>;
+  rest?: Maybe<RestResult>;
   rollDice?: Maybe<RollDiceResult>;
   viewer?: Maybe<Viewer>;
 };
@@ -41,6 +43,17 @@ export type QueryRollDiceArgs = {
   numDice: Scalars['Int']['input'];
   numSides?: InputMaybe<Scalars['Int']['input']>;
 };
+
+export type RestResult = {
+  __typename?: 'RestResult';
+  message?: Maybe<Scalars['String']['output']>;
+};
+
+export enum Role {
+  Admin = 'ADMIN',
+  Unknown = 'UNKNOWN',
+  User = 'USER'
+}
 
 export type RollDiceResult = {
   __typename?: 'RollDiceResult';
@@ -133,6 +146,8 @@ export type ResolversTypes = ResolversObject<{
   HelloResult: ResolverTypeWrapper<HelloResult>;
   Int: ResolverTypeWrapper<Scalars['Int']['output']>;
   Query: ResolverTypeWrapper<{}>;
+  RestResult: ResolverTypeWrapper<RestResult>;
+  Role: Role;
   RollDiceResult: ResolverTypeWrapper<RollDiceResult>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Viewer: ResolverTypeWrapper<Viewer>;
@@ -145,10 +160,17 @@ export type ResolversParentTypes = ResolversObject<{
   HelloResult: HelloResult;
   Int: Scalars['Int']['output'];
   Query: {};
+  RestResult: RestResult;
   RollDiceResult: RollDiceResult;
   String: Scalars['String']['output'];
   Viewer: Viewer;
 }>;
+
+export type AuthDirectiveArgs = {
+  requires?: Maybe<Role>;
+};
+
+export type AuthDirectiveResolver<Result, Parent, ContextType = GraphContext, Args = AuthDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type HelloPayloadResolvers<ContextType = GraphContext, ParentType extends ResolversParentTypes['HelloPayload'] = ResolversParentTypes['HelloPayload']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
@@ -163,9 +185,16 @@ export type HelloResultResolvers<ContextType = GraphContext, ParentType extends 
 }>;
 
 export type QueryResolvers<ContextType = GraphContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  adminsOnly?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   hello?: Resolver<Maybe<ResolversTypes['HelloResult']>, ParentType, ContextType>;
+  rest?: Resolver<Maybe<ResolversTypes['RestResult']>, ParentType, ContextType>;
   rollDice?: Resolver<Maybe<ResolversTypes['RollDiceResult']>, ParentType, ContextType, RequireFields<QueryRollDiceArgs, 'numDice'>>;
   viewer?: Resolver<Maybe<ResolversTypes['Viewer']>, ParentType, ContextType>;
+}>;
+
+export type RestResultResolvers<ContextType = GraphContext, ParentType extends ResolversParentTypes['RestResult'] = ResolversParentTypes['RestResult']> = ResolversObject<{
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
 export type RollDiceResultResolvers<ContextType = GraphContext, ParentType extends ResolversParentTypes['RollDiceResult'] = ResolversParentTypes['RollDiceResult']> = ResolversObject<{
@@ -186,7 +215,11 @@ export type Resolvers<ContextType = GraphContext> = ResolversObject<{
   HelloPayload?: HelloPayloadResolvers<ContextType>;
   HelloResult?: HelloResultResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  RestResult?: RestResultResolvers<ContextType>;
   RollDiceResult?: RollDiceResultResolvers<ContextType>;
   Viewer?: ViewerResolvers<ContextType>;
 }>;
 
+export type DirectiveResolvers<ContextType = GraphContext> = ResolversObject<{
+  auth?: AuthDirectiveResolver<any, any, ContextType>;
+}>;

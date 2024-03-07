@@ -3,6 +3,8 @@ import path from "path";
 
 import { makeExecutableSchema } from "@graphql-tools/schema";
 
+import { authDirective, getUser } from "./directives/auth";
+
 const getSchemaPath = () => {
   return path.join(process.cwd(), "schema.graphql");
 };
@@ -15,10 +17,17 @@ const getRawSchema = () => {
 };
 
 export const makeSchema = (resolverRoot: any) => {
-  const schema = makeExecutableSchema({
-    typeDefs: getRawSchema(),
+  const { authDirectiveTypeDefs, authDirectiveTransformer } = authDirective(
+    "auth",
+    getUser
+  );
+
+  let schema = makeExecutableSchema({
+    typeDefs: [authDirectiveTypeDefs, getRawSchema()],
     resolvers: resolverRoot,
   });
+
+  schema = authDirectiveTransformer(schema);
 
   return schema;
 };
