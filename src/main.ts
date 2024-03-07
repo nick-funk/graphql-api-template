@@ -1,9 +1,10 @@
 import express, { json } from "express";
 import { createHandler } from "graphql-http/lib/use/express";
 
-import { findUserForToken, getTokenFromReq } from "./auth";
 import { createGraphContext } from "./graphContext";
 import { buildRoot } from "./graphql";
+import { findUserForToken, getTokenFromReq } from "./middleware/auth";
+import { persistedQueryMiddleware } from "./middleware/persisted";
 import { makeSchema } from "./schema";
 
 const PORT = 7000;
@@ -15,8 +16,11 @@ const run = async () => {
   const resolverRoot = buildRoot();
   const schema = makeSchema(resolverRoot);
 
+  app.use(json());
+
   app.all(
     "/api",
+    persistedQueryMiddleware,
     createHandler({
       schema,
       rootValue: resolverRoot,

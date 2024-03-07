@@ -1,6 +1,6 @@
 import { v4 as uuid } from "uuid";
 
-import { User } from "./models";
+import { User } from "../models";
 
 export const getTokenFromReq = (req: any) => {
   const bearer = req.headers["authorization"];
