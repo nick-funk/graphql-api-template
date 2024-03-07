@@ -1,21 +1,17 @@
 import { v4 as uuid } from "uuid";
 
 import { GraphContext } from "../graphContext";
+import { QueryResolvers, QueryRollDiceArgs } from "../__generated__/resolversTypes";
 
-export interface RollDiceInput {
-  numDice: number;
-  numSides: number;
-}
-
-export const Query = {
-  hello: (root: any, args: any, context: GraphContext, info: any) => {
+export const Query: QueryResolvers = {
+  hello: (root, args, context: GraphContext, info) => {
     return {};
   },
   rollDice: (
-    root: any,
-    args: RollDiceInput,
+    root,
+    args: QueryRollDiceArgs,
     context: GraphContext,
-    info: any
+    info
   ) => {
     return {
       id: uuid(),
@@ -23,7 +19,7 @@ export const Query = {
       numSides: args.numSides || 6,
     };
   },
-  viewer: (obj: any, args: any, context: GraphContext, info: any) => {
+  viewer: (obj, args, context: GraphContext, info) => {
     if (!context.user) {
       return null;
     }

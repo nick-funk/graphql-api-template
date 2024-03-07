@@ -1,10 +1,11 @@
+import { ViewerResolvers } from "../__generated__/resolversTypes";
 import { GraphContext } from "../graphContext";
 
-export const Viewer = {
-  id: (obj: any, args: any, context: GraphContext, info: any) => {
-    return context.user?.id;
+export const Viewer: ViewerResolvers = {
+  id: (obj, args, context, info) => {
+    return context.user && context.user.id ? context.user.id : null;
   },
-  username: (obj: any, args: any, context: GraphContext, info: any) => {
-    return context.user?.username;
+  username: (obj, args, context: GraphContext, info) => {
+    return context.user && context.user.username ? context.user.username : null;
   },
 };
