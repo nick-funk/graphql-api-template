@@ -22,6 +22,7 @@ export const persistedQueryMiddleware = (
   const body = req.body;
   if (!body.queryID) {
     next();
+    return;
   }
 
   const query = queryLookup.get(body.queryID);
